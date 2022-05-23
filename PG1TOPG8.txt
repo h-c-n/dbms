@@ -1,0 +1,824 @@
+
+SQL*Plus: Release 11.2.0.2.0 Production on Tue Mar 15 10:59:59 2022
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+SQL> connect system
+Enter password:
+Connected.
+SQL> connect system
+Enter password:
+Connected.
+
+
+SQL> create table student2(rollno int,name varchar(20),course varchar(10),year i
+nt);
+
+Table created.
+
+
+
+SQL> insert into student2 values(17,'harsha','mca',2021);
+
+1 row created.
+
+SQL> insert into student2 values(19,'joel','mca',2022);
+
+1 row created.
+
+SQL> insert into student2 values(18,'jacob','mca',2021);
+
+1 row created.
+
+SQL> insert into student2 values(20,'jubitha','mca',2021);
+
+1 row created.
+
+SQL> insert into student2 values(21,'muhsina','mca',2021);
+
+1 row created.
+
+SQL> select * from student2;
+
+    ROLLNO NAME                 COURSE           YEAR
+---------- -------------------- ---------- ----------
+        17 harsha               mca              2021
+        19 joel                 mca              2022
+        18 jacob                mca              2021
+        20 jubitha              mca              2021
+        21 muhsina              mca              2021
+
+
+
+
+SQL> alter table student2 add primary key(rollno);
+
+Table altered.
+
+
+SQL> truncate table student2;
+
+Table truncated.
+
+SQL> drop table student2;
+
+Table dropped.
+
+------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+SQL> create table employee(empid int ,name varchar(20), dept varchar(10),salary
+  2  int);
+
+Table created.
+
+
+
+SQL> alter table employee add primary key(empid);
+
+Table altered.
+
+
+SQL> create table dept(deptid int,dept varchar(10),hod varchar(10));
+
+Table created.
+
+SQL> alter table dept add primary key(dept);
+
+Table altered.
+
+SQL> alter table employee add foreign key(dept) references dept(dept);
+
+Table altered.
+
+
+                            TCL
+
+SQL> insert into dept values(10,'mca','biju');
+
+1 row created.
+
+SQL> insert into dept values(10,'civil','babu');
+
+1 row created.
+
+SQL> select * from dept;
+
+    DEPTID DEPT       HOD
+---------- ---------- ----------
+        10 mca        biju
+        10 civil      babu
+
+SQL> insert into employee values(10,'manu','mca',20000);
+
+1 row created.
+
+
+
+SQL> insert into employee values(11,'joel','mca',20000);
+
+1 row created.
+
+SQL> select * from employee;
+
+     EMPID NAME                 DEPT           SALARY
+---------- -------------------- ---------- ----------
+        10 manu                 mca             20000
+        11 joel                 mca             20000
+
+
+SQL> update dept set deptid=12 where dept='civil';
+
+1 row updated.
+
+SQL> select * from dept;
+
+    DEPTID DEPT       HOD
+---------- ---------- ----------
+        10 mca        biju
+        12 civil      babu
+SQL> delete from employee where empid=11;
+
+1 row deleted.
+
+
+SQL> select * from dept;
+
+    DEPTID DEPT       HOD
+---------- ---------- ----------
+        19 bsc        asif
+        14 bcom       amy
+        12 literature hcn
+
+SQL> commit;
+
+Commit complete.
+
+SQL> SAVEPOINT hcn;
+
+Savepoint created.
+
+SQL> insert into dept values(17,'mca','airin');
+
+1 row created.
+
+SQL> select * from dept;
+
+    DEPTID DEPT       HOD
+---------- ---------- ----------
+        19 bsc        asif
+        14 bcom       amy
+        12 literature hcn
+        17 mca        airin
+
+SQL> rollback;
+
+Rollback complete.
+
+SQL> select * from dept;
+
+    DEPTID DEPT       HOD
+---------- ---------- ----------
+        19 bsc        asif
+        14 bcom       amy
+        12 literature hcn
+
+SQL>
+
+
+                             DCL
+
+SQL> create user hcn identified by hcn;
+
+User created.
+
+SQL> grant create session to hcn;
+
+Grant succeeded.
+
+SQL> grant all on  dept to hcn;
+
+Grant succeeded.
+
+
+
+
+SQL> select * from system.dept;
+
+    DEPTID DEPT       HOD
+---------- ---------- ----------
+        19 bsc        asif
+        14 bcom       amy
+        12 literature hcn
+
+SQL> select * from system.employee;
+select * from system.employee
+                     *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> connect sysytem;
+Enter password:
+ERROR:
+ORA-01017: invalid username/password; logon denied
+
+
+Warning: You are no longer connected to ORACLE.
+SQL> connect system;
+Enter password:
+Connected.
+SQL> grant resource to hcn;
+
+Grant succeeded.
+
+SQL> connect hcn
+Enter password:
+Connected.
+SQL> create table cafe(no int, item varchar(10));
+
+Table created.
+SQL> connect system;
+Enter password:
+Connected.
+SQL> revoke resource from hcn;
+
+Revoke succeeded.
+
+
+--------------------------------------------------------------------------
+innerjoin
+
+SQL> create table pra1(id int,age int);
+
+Table created.
+
+SQL> create table pra2(id int,name varchar(15));
+
+Table created.
+
+SQL> insert into pra1 values(101,80);
+
+1 row created.
+
+SQL> insert into pra1 values(102,70);
+
+1 row created.
+
+SQL> insert into pra2 values(102,'hcn');
+
+1 row created.
+
+SQL> insert into pra2 values(101,'airin');
+
+1 row created.
+
+SQL> select * from pra1;
+
+        ID        AGE
+---------- ----------
+       101         80
+       102         70
+
+SQL> select * from pra2;
+
+        ID NAME
+---------- ---------------
+       102 hcn
+       101 airin
+
+
+
+SQL> SELECT pra1.id,pra2.name from pra1 inner join pra2 on pra1.id=pra2.id;
+
+        ID NAME
+---------- ---------------
+       102 hcn
+       101 airin
+
+SQL> insert into pra2 values(103,'abel');
+
+1 row created.
+
+
+SQL> insert into pra2 values(102,'ami');
+
+1 row created.
+
+SQL> SELECT pra1.id,pra2.name from pra1 inner join pra2 on pra1.id=pra2.id;
+
+        ID NAME
+---------- ---------------
+       102 hcn
+       101 airin
+       102 ami
+
+
+
+------------------------------------------------------------------------------------------------------
+5.
+
+SQL*Plus: Release 11.2.0.2.0 Production on Thu Apr 7 14:39:00 2022
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+SQL> connect system;
+Enter password:
+Connected.
+SQL> create table emp(id int,name varchar(10),age int,home varchar(10),salary in
+
+
+SQL> create table emp(id int,name varchar(10),age int,home varchar(20),salary in
+t);
+
+Table created.
+
+SQL> insert into emp values(1,'ramesh',32,'ahmedabad',20000);
+
+1 row created.
+
+SQL> insert into emp values(2,'khilan',25,'delhi',15000);
+
+1 row created.
+
+SQL> insert into emp values(3,'kaushik',23,'kota',20000);
+
+1 row created.
+
+SQL> insert into emp values(4,'chaiali',25,'mumbai',6500);
+
+1 row created.
+
+SQL> insert into emp values(5,'hardik',27,'bhopal',8500);
+
+1 row created.
+
+SQL> insert into emp values(6,'komal',22,'indore',4500);
+
+1 row created.
+
+SQL> insert into emp values(7,'muffy',24,'delhi',10000);
+
+1 row created.
+
+SQL> insert into emp values(8,'ramu',23,'mp',60000);
+
+1 row created.
+
+SQL> insert into emp values(9,'rohit',24,'ahmedabad',5000);
+
+1 row created.
+
+SQL> insert into emp values(10,'shamli',23,'mumbai',10000);
+
+1 row created.
+
+SQL> select * from emp;
+
+        ID NAME              AGE HOME                     SALARY
+---------- ---------- ---------- -------------------- ----------
+         1 ramesh             32 ahmedabad                 20000
+         2 khilan             25 delhi                     15000
+         3 kaushik            23 kota                      20000
+         4 chaiali            25 mumbai                     6500
+         5 hardik             27 bhopal                     8500
+         6 komal              22 indore                     4500
+         7 muffy              24 delhi                     10000
+         8 ramu               23 mp                        60000
+         9 rohit              24 ahmedabad                  5000
+        10 shamli             23 mumbai                    10000
+
+10 rows selected.
+
+SQL> select * from emp where id=4;
+
+        ID NAME              AGE HOME                     SALARY
+---------- ---------- ---------- -------------------- ----------
+         4 chaiali            25 mumbai                     6500
+
+ 
+
+
+SQL> select distinct(home)from emp;
+
+HOME
+--------------------
+bhopal
+mp
+delhi
+mumbai
+indore
+kota
+ahmedabad
+
+7 rows selected.
+
+SQL> select count(salary) from emp;
+
+COUNT(SALARY)
+-------------
+           10
+
+----------------------------------------------------------------------------------------------------------
+6.
+SQL> create table employee1(id int,firstname varchar(10),lastname varchar(10),d
+pt varchar(10),location varchar(10),salary int);
+
+Table created.
+
+SQL> insert into employee1 values(1,'harshad','kuwar','marketing','pune',10000)
+
+
+1 row created.
+
+SQL>
+SQL> insert into employee1 values(2,'anurag','rajput','it','mumbai'20000);
+insert into employee1 values(2,'anurag','rajput','it','mumbai'20000)
+                                                              *
+ERROR at line 1:
+ORA-00917: missing comma
+
+
+SQL> insert into employee1 values(3,'chaitali','tarle','it','chennai',30000);
+
+1 row created.
+
+SQL> insert into employee1 values(4,'prajnal','patil','it','chennai',25000);
+
+1 row created.
+
+SQL> insert into employee1 values(5,'suraj','tripati','marketing','pune',15000)
+
+
+1 row created.
+
+SQL> insert into employee1 values(6,'rashmi','jadhav','finance','bangalore',200
+0);
+
+1 row created.
+
+SQL> insert into employee1 values(7,'sandhya','jain','finance','bangalore',2000
+);
+
+1 row created.
+
+SQL> select * from employee;
+
+no rows selected
+
+SQL> select * from employee1;
+
+        ID FIRSTNAME  LASTNAME   DEPT       LOCATION       SALARY
+---------- ---------- ---------- ---------- ---------- ----------
+         1 harshad    kuwar      marketing  pune            10000
+         3 chaitali   tarle      it         chennai         30000
+         4 prajnal    patil      it         chennai         25000
+         5 suraj      tripati    marketing  pune            15000
+         6 rashmi     jadhav     finance    bangalore       20000
+         7 sandhya    jain       finance    bangalore       20000
+
+6 rows selected.
+
+SQL> select * from employee1 where dept='it' and location='chennai';
+
+        ID FIRSTNAME  LASTNAME   DEPT       LOCATION       SALARY
+---------- ---------- ---------- ---------- ---------- ----------
+         3 chaitali   tarle      it         chennai         30000
+         4 prajnal    patil      it         chennai         25000
+
+SQL> select * from employee1 where dept='it' or location='chennai';
+
+        ID FIRSTNAME  LASTNAME   DEPT       LOCATION       SALARY
+---------- ---------- ---------- ---------- ---------- ----------
+         3 chaitali   tarle      it         chennai         30000
+         4 prajnal    patil      it         chennai         25000
+         2 anurag     rajput     it         mumbai          20000
+SQL> select firstname as empfn,location as address from employee1;
+
+EMPFN      ADDRESS
+---------- ----------
+harshad    pune
+chaitali   chennai
+prajnal    chennai
+suraj      pune
+rashmi     bangalore
+sandhya    bangalore
+anurag     mumbai
+
+7 rows selected.
+SQL> select * from employee1 where firstname like 's%';
+
+        ID FIRSTNAME  LASTNAME   DEPT       LOCATION       SALARY
+---------- ---------- ---------- ---------- ---------- ----------
+         5 suraj      tripati    marketing  pune            15000
+         7 sandhya    jain       finance    bangalore       20000
+
+SQL> select sum(salary),location from employee1 group by location;
+
+SUM(SALARY) LOCATION
+----------- ----------
+      55000 chennai
+      20000 mumbai
+      25000 pune
+      40000 bangalore
+
+
+SQL> select sum(salary),location from employee1 group by location having sum(sal
+ary)>10000;
+
+SUM(SALARY) LOCATION
+----------- ----------
+      55000 chennai
+      20000 mumbai
+      25000 pune
+      40000 bangalore
+
+SQL> select* from employee1 order by(firstname);
+
+        ID FIRSTNAME  LASTNAME   DEPT       LOCATION       SALARY
+---------- ---------- ---------- ---------- ---------- ----------
+         2 anurag     rajput     it         mumbai          20000
+         3 chaitali   tarle      it         chennai         30000
+         1 harshad    kuwar      marketing  pune            10000
+         4 prajnal    patil      it         chennai         25000
+         6 rashmi     jadhav     finance    bangalore       20000
+         7 sandhya    jain       finance    bangalore       20000
+         5 suraj      tripati    marketing  pune            15000
+
+7 rows selected.
+==================================================================================================================
+7.
+
+SQL> create table stud(stuid int,stuname varchar(20),marks int);
+
+Table created.
+
+
+SQL> insert into stud values(1,'sanjay',64);
+
+1 row created.
+
+SQL> insert into stud values(2,'varun',72);
+
+1 row created.
+
+SQL> insert into stud values(3,'akash',45);
+
+1 row created.
+
+SQL> insert into stud values(4,'rohit',86);
+
+1 row created.
+
+SQL> insert into stud values(5,'anjali',92);
+
+1 row created.
+
+SQL> insert into stud values(6,'ammu',95);
+
+1 row created.
+
+SQL> insert into stud values(7,'rahul',80);
+
+1 row created.
+
+SQL> insert into stud values(8,'pratibha',62);
+
+1 row created.
+
+SQL> insert into stud values(9,'ravi',75);
+
+1 row created.
+
+SQL> insert into stud values(10,'pulkit',76);
+
+1 row created.
+
+SQL> select * from stud;
+
+     STUID STUNAME                   MARKS
+---------- -------------------- ----------
+         1 sanjay                       64
+         2 varun                        72
+         3 akash                        45
+         4 rohit                        86
+         5 anjali                       92
+         6 ammu                         95
+         7 rahul                        80
+         8 pratibha                     62
+         9 ravi                         75
+        10 pulkit                       76
+
+10 rows selected.
+
+SQL> commit;
+
+Commit complete.
+
+SQL> select count(marks) from stud where marks > 75;
+
+COUNT(MARKS)
+------------
+           5
+
+SQL> select count(marks) from stud where marks > 75;
+
+COUNT(MARKS)
+------------
+           5
+
+SQL> select avg(marks) from stud;
+
+AVG(MARKS)
+----------
+      74.7
+
+SQL> select min(marks) from stud;
+
+MIN(MARKS)
+----------
+        45
+
+SQL> select max(marks) from stud;
+
+MAX(MARKS)
+----------
+        95
+
+8.
+
+----------------------------------------------------------------------
+SQL> create table sailor(sid int,sname varchar(20),rating int,age float,primary
+key(sid));
+
+Table created.
+
+SQL> create table boats(bid int,bname varchar(20),color varchar(20),primary key(
+bid));
+SQL> create table reserves(sid int,bid int,day date, foreign key(sid) references
+ sailor(sid),foreign key(bid) references boats(bid)) ;
+
+
+
+SQL> insert into sailor values(22,'dustin',7,45.0);
+
+1 row created.
+
+SQL> insert into sailor values(29,'brutus',1,33.0);
+
+1 row created.
+
+SQL> insert into sailor values(31,'lubber',8,55.5);
+
+1 row created.
+
+SQL> insert into sailor values(32,'andy',8,25.5);
+
+1 row created.
+
+SQL> insert into sailor values(58,'rusty',10,35.0);
+
+1 row created.
+
+SQL> insert into sailor values(64,'horatio',7,35.0);
+
+1 row created.
+
+SQL> insert into sailor values(71,'zorba',10,16.0);
+
+1 row created.
+
+SQL> insert into sailor values(74,'horatio',9,35.0);
+
+1 row created.
+
+SQL> insert into sailor values(85,'art',3,25.5);
+
+1 row created.
+
+SQL> insert into sailor values(95,'bob',3,63.5);
+
+1 row created.
+
+SQL> insert into boats values(101,'interlake','blue');
+
+1 row created.
+
+SQL> insert into boats values(102,'interlake','red');
+
+1 row created.
+
+SQL> insert into boats values(103,'clipper','green');
+
+1 row created.
+
+SQL> insert into boats values(104,'marine','red');
+
+1 row created.
+\SQL> insert into reserves values(22,101,TO_DATE('10/10/98', 'DD/MM/YY'));
+
+1 row created.
+
+SQL>
+SQL> insert into reserves values(22,102,TO_DATE('10/10/98', 'DD/MM/YY'));
+
+1 row created.
+
+SQL> insert into reserves values(22,103,TO_DATE('10/8/98', 'DD/MM/YY'));
+
+1 row created.
+
+SQL> insert into reserves values(22,104,TO_DATE('10/7/98', 'DD/MM/YY'));
+
+1 row created.
+
+SQL> insert into reserves values(31,102,TO_DATE('11/10/98', 'DD/MM/YY'));
+
+1 row created.
+
+SQL> insert into reserves values(31,103,TO_DATE('11/6/98', 'DD/MM/YY'));
+
+1 row created.
+
+SQL> insert into reserves values(31,104,TO_DATE('11/12/98', 'DD/MM/YY'));
+
+1 row created.
+
+SQL> insert into reserves values(64,101,TO_DATE('9/5/98', 'DD/MM/YY'));
+
+1 row created.
+
+SQL> insert into reserves values(64,102,TO_DATE('9/5/98', 'DD/MM/YY'));
+
+1 row created.
+
+SQL> insert into reserves values(74,103,TO_DATE('9/8/98', 'DD/MM/YY'));
+
+1 row created.
+SQL> select distinct(sname) from sailor;
+
+SNAME
+--------------------
+brutus
+bob
+lubber
+andy
+rusty
+dustin
+zorba
+art
+horatio
+
+9 rows selected.
+
+SQL>SQL> select * from sailor where sid in(select sid from reserves where bid=101);
+
+       SID SNAME                    RATING        AGE
+---------- -------------------- ---------- ----------
+        22 dustin                        7         45
+        64 horatio                       7         35
+
+
+SQL> select sname from sailor  where sid in(select distinct(sid) from reserves);
+
+
+SNAME
+--------------------
+dustin
+lubber
+horatio
+horatio
+
+SQL> select sname from sailor  where sid in(select sid from reserves where bid i
+n(select bid from boats where color='red'))order by(age);
+
+SNAME
+--------------------
+horatio
+dustin
+lubber
+
+SQL> select sid,sname from sailor where sid in(select sid from reserves having
+count(*) > 1 group by day,sid);
+
+       SID SNAME
+---------- --------------------
+        22 dustin
+        64 horatio
+
+
+
+
+
+
+
